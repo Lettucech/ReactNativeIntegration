@@ -13,15 +13,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.github.brianbridge.reactnativeintegration.R;
 import com.github.brianbridge.reactnativeintegration.fragment.HomeFragment;
+import com.github.brianbridge.reactnativeintegration.fragment.SingleReactNativeFragment;
 import com.github.brianbridge.reactnativeintegration.view.drawer.SlideAnimationDrawerListener;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
+
+    public interface OnBackPressedListener {
+        boolean onBackPressed();
+    }
+
+    public interface OnKeyUpListener {
+        boolean onKeyUp(int keyCode, KeyEvent event);
+    }
 
     private static final float END_SCALE = 0.7f;
     private DrawerLayout mDrawerLayout;
@@ -100,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new HomeFragment();
                 break;
             case R.id.menu_single_react_page:
-                fragment = new HomeFragment();
+                fragment = new SingleReactNativeFragment();
                 break;
             default:
                 fragment = new HomeFragment();
@@ -118,4 +128,20 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawers();
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout_content);
+        if (!(currentFragment instanceof OnBackPressedListener && ((OnBackPressedListener) currentFragment).onBackPressed())) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout_content);
+        if (currentFragment instanceof OnKeyUpListener && ((OnKeyUpListener) currentFragment).onKeyUp(keyCode, event)) {
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
 }
