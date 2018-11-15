@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ReactNativeIntegration</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- Menu Item -->
+    <string name="menu_item_home">Home</string>
+    <string name="menu_item_single_react_page">Single React Page</string>
 </resources>
